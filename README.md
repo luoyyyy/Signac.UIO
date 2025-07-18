@@ -1,6 +1,6 @@
 # Signac.UIO
 An interactive R Shiny application for the comprehensive analysis and visualization of single-cell chromatin accessibility data. Leveraging the power of Signac, which integrates seamlessly with the Seurat package for single-cell RNA-seq analysis, Signac.UiO offers a user-friendly platform for conducting end-to-end scATAC-seq data analysis. The application supports quality control, cell filtering, dimensionality reduction, clustering, DNA motif analysis, transcription factor footprinting, and interactive data visualization. Signac.UiO is the only web server providing a comprehensive Signac-based interface for single-cell chromatin accessibility analysis. Users can upload their data, visualize results in real time, and export analysis outcomes in multiple formats, including PDF, PNG, JPEG, CSV, and TXT.
-![](man/figures/pinpeline.png) The Shiny application is additionally hosted at <https://xulabgdpu.org.cn/Signac.UIO>.
+![](man/figures/pinpeline.svg) The Shiny application is additionally hosted at <https://xulabgdpu.org.cn/Signac.UIO>.
 
 ## Local Installation (Optional)
 
