@@ -36,7 +36,7 @@ ui<-dashboardPage(
           icon = icon("chart-column", lib = "font-awesome")
         ),
         menuItem(
-          "Cell Filtration",
+          "Filter Cell",
           tabName = "ones",
           icon = icon("chart-column", lib = "font-awesome")
         ),
@@ -56,12 +56,12 @@ ui<-dashboardPage(
         ),
         
         menuItem(
-          "Peaks Visualization",
+          "Calling Peak",
           tabName = "four",
           icon = icon("chart-column", lib = "font-awesome")
         ),
         menuItem(
-          "Pathway Enrichment",
+          "GO Analysis",
           tabName = "five",
           icon = icon("chart-column", lib = "font-awesome")
         ),
@@ -72,7 +72,7 @@ ui<-dashboardPage(
         
         
         menuItem(
-          "TF FootPrinting",
+          "FootPrinting",
           tabName = "seven",
           icon = icon("chart-column", lib = "font-awesome")
         ),

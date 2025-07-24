@@ -1,7 +1,6 @@
 set.seed(1234)
 
 server <- function(input,output,session){
-    
   # server global var
   # base
   cat(R.Version()$version.string," \033[0m\n");
@@ -123,7 +122,7 @@ server <- function(input,output,session){
       vbox_filter_cell = renderValueBox({
         color<-if (!is.null(qcVlnPlots)) "yellow" else "orange"
         icon_name <- if (!is.null(qcVlnPlots)) "check" else "hourglass-half"
-        valueBox(value=NULL,subtitle =tags$p("Cell Filtration",style = "font-size:14px;font-weight:bold"),
+        valueBox(value=NULL,subtitle =tags$p("Filter Cell",style = "font-size:14px;font-weight:bold"),
                  color=color,icon = icon(icon_name,style = "font-size: 25px"))}),
       vbox_NDR=renderValueBox({
         color<-if (!is.null(values$dpDimPlot)) "yellow" else "orange"
@@ -139,12 +138,12 @@ server <- function(input,output,session){
       vbox_findAllmaker=renderValueBox({
         color<-if (!is.null(FindAllMarkers_result)) "yellow" else "orange"
         icon_name <- if (!is.null(FindAllMarkers_result)) "check" else "hourglass-half"
-        valueBox(value = NULL,subtitle =tags$p("Find cluster marker",style="font-size:14px;font-weight:bold"),
+        valueBox(value = NULL,subtitle =tags$p("One vs Rest Cluster",style="font-size:14px;font-weight:bold"),
                  color=color,icon = icon(icon_name,style = "font-size: 25px"))}),
       vbox_findIdentsmaker=renderValueBox({
         color<-if (!is.null(FindMarkers_result1)) "yellow" else "orange"
         icon_name <- if (!is.null(FindMarkers_result1)) "check" else "hourglass-half"
-        valueBox(value = NULL,subtitle =tags$p("Compare cluster marker",style="font-size:14px;font-weight:bold"),
+        valueBox(value = NULL,subtitle =tags$p("One vs One Cluster",style="font-size:14px;font-weight:bold"),
                  color=color,icon = icon(icon_name,style = "font-size: 25px"))}),
       vbox_annotation=renderValueBox({
         color<-if (!is.null(cells)) "yellow" else "orange"
@@ -154,12 +153,12 @@ server <- function(input,output,session){
       vbox_calling_peak=renderValueBox({
         color<-if (!is.null(grGenomicRegionsPlot)) "yellow" else "orange"
         icon_name <- if (!is.null(grGenomicRegionsPlot)) "check" else "hourglass-half"
-        valueBox(value = NULL,subtitle =tags$p("Peaks Visualization",style="font-size:14px;font-weight:bold"),
+        valueBox(value = NULL,subtitle =tags$p("Calling Peak",style="font-size:14px;font-weight:bold"),
                  color=color,icon = icon(icon_name,style = "font-size: 25px"))}),
       vbox_GO_plot=renderValueBox({
         color<-if (!is.null(ident1_ego1)) "yellow" else "orange"
         icon_name <- if (!is.null(ident1_ego1)) "check" else "hourglass-half"
-        valueBox(value = NULL,subtitle =tags$p("Pathway Enrichment",style="font-size:14px;font-weight:bold"),
+        valueBox(value = NULL,subtitle =tags$p("GO Analysis",style="font-size:14px;font-weight:bold"),
                  color=color,icon = icon(icon_name,style = "font-size: 25px"))}),
       vbox_motifs_analysis=renderValueBox({
         color<-if (!is.null(enriched.motifs1)) "yellow" else "orange"
@@ -174,7 +173,7 @@ server <- function(input,output,session){
       vbox_footprint=renderValueBox({
         color<-if (!is.null(fpFootPrintingPlot)) "yellow" else "orange"
         icon_name <- if (!is.null(fpFootPrintingPlot)) "check" else "hourglass-half"
-        valueBox(value = NULL,subtitle =tags$p("TF Foot Printing",style="font-size:14px;font-weight:bold"),
+        valueBox(value = NULL,subtitle =tags$p("Foot Printing",style="font-size:14px;font-weight:bold"),
                  color=color,icon = icon(icon_name,style = "font-size: 25px"))})
     )} 
   
@@ -270,39 +269,22 @@ server <- function(input,output,session){
         )})}
     if(input$Selectdata == "Example Data"){
       print(input$inTabset)
-      # addPopover(session, id = 'Selectdata', title = "Example Data",
-      #            content = paste(
-      #              '<p>You can learn more about the Example Data on the <a href="https://cf.10xgenomics.com/samples/cell-atac/2.0.0/atac_pbmc_500_nextgem/atac_pbmc_500_nextgem_web_summary.html" target="_blank">website</a></p>',
-      #              '<p>Here are the download links for the Example Data:</p>',
-      #              '<ul>',
-      #              '<li><a href="https://cf.10xgenomics.com/samples/cell-atac/2.0.0/atac_pbmc_500_nextgem/atac_pbmc_500_nextgem_filtered_peak_bc_matrix.h5" target="_blank">atac_pbmc_500_nextgem_filtered_peak_bc_matrix.h5</a></li>',
-      #              '<li><a href="https://cf.10xgenomics.com/samples/cell-atac/2.0.0/atac_pbmc_500_nextgem/atac_pbmc_500_nextgem_fragments.tsv.gz" target="_blank">atac_pbmc_500_nextgem_fragments.tsv.gz</a></li>',
-      #              '<li><a href="https://cf.10xgenomics.com/samples/cell-atac/2.0.0/atac_pbmc_500_nextgem/atac_pbmc_500_nextgem_fragments.tsv.gz.tbi" target="_blank">atac_pbmc_500_nextgem_fragments.tsv.gz.tbi</a></li>',
-      #              '<li><a href="https://cf.10xgenomics.com/samples/cell-atac/2.0.0/atac_pbmc_500_nextgem/atac_pbmc_500_nextgem_singlecell.csv" target="_blank">atac_pbmc_500_nextgem_singlecell.csv</a></li>',
-      #              '</ul>'
-      #            ),
-      #            placement = 'right', trigger = 'click', options = list(container = 'body'))
-      # 
       updateSelectInput(session,"SelectRefer_data", 
                         choices = c("EnsDb.Hsapiens.v75"), 
                         selected = "EnsDb.Hsapiens.v75")
-      #shinyjs::disable("SelectRefer_data")
-      output$FileInputs <- renderUI({
+         output$FileInputs <- renderUI({
         tagList(
           div(
             HTML(paste(
-              '<p>You can learn more about the Example Data on the <a href="https://cf.10xgenomics.com/samples/cell-atac/2.0.0/atac_pbmc_500_nextgem/atac_pbmc_500_nextgem_web_summary.html" target="_blank">website</a></p>',
+              '<p>You can learn more about the Example Data on the <a href="https://cf.10xgenomics.com/samples/cell-atac/1.1.0/atac_pbmc_500_nextgem/atac_pbmc_500_nextgem_web_summary.html" target="_blank">website</a></p>',
               '<p>Here are the download links for the Example Data:</p>',
               '<ul style="list-style-type:none; padding-left:0;">',
-              '<li><a href="https://cf.10xgenomics.com/samples/cell-atac/2.0.0/atac_pbmc_500_nextgem/atac_pbmc_500_nextgem_filtered_peak_bc_matrix.h5" target="_blank">atac_pbmc_500_nextgem_filtered_peak_bc_matrix.h5</a></li>',
-              '<li><a href="https://cf.10xgenomics.com/samples/cell-atac/2.0.0/atac_pbmc_500_nextgem/atac_pbmc_500_nextgem_fragments.tsv.gz" target="_blank">atac_pbmc_500_nextgem_fragments.tsv.gz</a></li>',
-              '<li><a href="https://cf.10xgenomics.com/samples/cell-atac/2.0.0/atac_pbmc_500_nextgem/atac_pbmc_500_nextgem_fragments.tsv.gz.tbi" target="_blank">atac_pbmc_500_nextgem_fragments.tsv.gz.tbi</a></li>',
-              '<li><a href="https://cf.10xgenomics.com/samples/cell-atac/2.0.0/atac_pbmc_500_nextgem/atac_pbmc_500_nextgem_singlecell.csv" target="_blank">atac_pbmc_500_nextgem_singlecell.csv</a></li>',
+              '<li><a href="https://cf.10xgenomics.com/samples/cell-atac/1.1.0/atac_pbmc_500_nextgem/atac_pbmc_500_nextgem_filtered_peak_bc_matrix.h5" target="_blank">atac_pbmc_500_nextgem_filtered_peak_bc_matrix.h5</a></li>',
+              '<li><a href="https://cf.10xgenomics.com/samples/cell-atac/1.1.0/atac_pbmc_500_nextgem/atac_pbmc_500_nextgem_fragments.tsv.gz" target="_blank">atac_pbmc_500_nextgem_fragments.tsv.gz</a></li>',
+              '<li><a href="https://cf.10xgenomics.com/samples/cell-atac/1.1.0/atac_pbmc_500_nextgem/atac_pbmc_500_nextgem_fragments.tsv.gz.tbi" target="_blank">atac_pbmc_500_nextgem_fragments.tsv.gz.tbi</a></li>',
+              '<li><a href="https://cf.10xgenomics.com/samples/cell-atac/1.1.0/atac_pbmc_500_nextgem/atac_pbmc_500_nextgem_singlecell.csv" target="_blank">atac_pbmc_500_nextgem_singlecell.csv</a></li>',
               '</ul>'
             )),
-            # code("Two tab-delimited text/csv input files (chromatin accessibility matrix and gene expression matrix) are required before running Linkage."),
-            # "The gene expression matrix file is a tab-delimited multi-column data matrix, which the first column represents gene symbols and the following columns represent normalized or raw expression levels of genes for each sample. The chromatin accessibility matrix file is a tab-delimited multi-column data matrix as well, which the first three columns represent chromosome name, start coordinate on the chromosome and end coordinate on the chromosome of the peaks respectively; the remaining columns of the chromatin accessibility matrix file represent normalized or raw chromatin accessibility levels of peaks for each sample.",
-            # strong("Each element of ready-to-analysis files will appear in Chromatin Accessibility Matrix panel and Gene Expression Matrix panel."),
             style ="color:black; font-style:calibri;word-spacing:2;line-height:1.5;baseline：middle;",
             align = "justify"
           )
@@ -450,33 +432,23 @@ server <- function(input,output,session){
         print(input$fileFragments$datapath)
         print(input$fileFragmentsTbi$datapath)
         cat("\033[31m","  CreateChromatinAssay1! \033[0m\n");
-        print("-----------------------------------")
-        # tryCatch({
-        chrom_assay <-
-          CreateChromatinAssay(
+        chrom_assay <-CreateChromatinAssay(
             counts = count(),
             sep = c(":", "-"),
             # genome = 'hg19',
             fragments = f2,
             min.cells = 10,
-            min.features = 200
-          )
-        print("...............................")
-        print(metadata())
+            min.features = 200)
         cat("\033[31m","  CreateSeuratObject! \033[0m\n");
         pbmc <<- CreateSeuratObject(counts = chrom_assay, assay = "peaks", meta.data = metadata())
-        print(pbmc)
-        # updateProgressBar(session = session,id = "simulationProgress2",value = 50)
         for (i in 35:50 ){
           updateProgressBar(
             session = session,
             id = "simulationProgress2",
             value = i,
             title = "Load Data Runing...",
-            total = 100
-          )
-          Sys.sleep(0.1)
-        } 
+            total = 100)
+          Sys.sleep(0.1)} 
         cat("\033[31m","  Add Gene annotation to SeuratObject! \033[0m\n");
         if(input$SelectRefer_data=="EnsDb.Hsapiens.v86"){
           print(startsWith(rownames(pbmc@assays[["peaks"]]@data)[1], "chr"))
@@ -510,41 +482,18 @@ server <- function(input,output,session){
           genome(annotations) <- unlist(strsplit(sf_data,"\\."))[length(unlist(strsplit(sf_data,"\\.")))]
           Annotation(pbmc) <<- annotations
         }
-        
-        print("-------------------ff-------------------------")
         rm(metadata,chrom_assay,annotations)
-        print(head(Annotation(pbmc),2))
-        print(pbmc)
-        print(colnames(pbmc@meta.data))
-        print(ls())
         pbmc_exists <<- T
         for (i in 50:65) {
-          updateProgressBar(
-            session = session,
-            id = "simulationProgress2",
-            value = i,
-            title = "Load Data Runing...",
-            total = 100
-          )
+          updateProgressBar(session = session,id = "simulationProgress2",value = i,title = "Load Data Runing...",total = 100)
           Sys.sleep(0.1)
-        }
-        
-        # updateProgressBar(session = session,id = "simulationProgress2",value = 75)
-        print(pbmc)
-        print("...............................666")
+          }
         pbmc <<- NucleosomeSignal(object = pbmc)
-        print("...............................111")
         pbmc <<- TSSEnrichment(object = pbmc, fast = FALSE)
-        print("...............................111")
         for (i in 65:90) {
           updateProgressBar(
-            session = session,
-            id = "simulationProgress2",
-            value = i,
-            title = "Load Data Runing...",
-            total = 100
-          )
-          Sys.sleep(0.1)
+            session = session,id = "simulationProgress2",value = i,title = "Load Data Runing...",total = 100)
+            Sys.sleep(0.1)
         }
         pbmc$pct_reads_in_peaks <<- pbmc$peak_region_fragments / pbmc$passed_filters * 100
         for (i in 90:98) {
@@ -558,7 +507,7 @@ server <- function(input,output,session){
           Sys.sleep(0.1)
         }
         pbmc$blacklist_ratio <<- pbmc$blacklist_region_fragments / pbmc$peak_region_fragments
-        print("...............................111") 
+        
         updateProgressBar(session = session, id = "simulationProgress2", title = "Load Data Runing...",value = 100 )
         closeSweetAlert(session = session)
         sendSweetAlert(title = "Done",text = "Load Data Completed",type = "success")
@@ -636,8 +585,6 @@ server <- function(input,output,session){
       qcVlnPlot <<- VlnPlot(pbmc,features = c('peak_region_fragments','TSS.enrichment', 'blacklist_ratio', 'nucleosome_signal','pct_reads_in_peaks'),
                             pt.size = Seurat:::AutoPointSize(data = pbmc),ncol = 5)
       print(qcVlnPlot)
-      pbmc1 <- dim(pbmc)
-      print(pbmc1)
     })
     updateTabsetPanel(session,"qVinplot",selected = "Before Filter")
     # output$text.cellsremain1<-renderText({
@@ -670,30 +617,19 @@ server <- function(input,output,session){
     output$QCVlnPlots <- renderPlot({
         input$submit_FilterCells
         cat("\033[31m","  QC:VlnPlots \033[0m\n");
-        # QC()
         qcVlnPlots <<- VlnPlot(pbmcs_1,features = c('peak_region_fragments','TSS.enrichment', 'blacklist_ratio', 'nucleosome_signal','pct_reads_in_peaks'),
                                pt.size = Seurat:::AutoPointSize(data = pbmc),ncol = 5,group.by = input$qcGroup )
         print(qcVlnPlots)
         print(pbmcs_1)    
     })
-    # output$text.cellsremain2<-renderText({
-    #   if(!is.null(pbmcs)){
-    #     if(!is.null(pbmcs@meta.data)){
-    #       cell_counts_after<<-length( pbmcs@meta.data[["peak_region_fragments"]])
-    #       paste(cell_counts_after,"cells remain after current filters")
-    #     }}
-    # })
     output$vbox_cell_tab2<-renderValueBox({
         req(pbmcs_1, pbmcs_1@meta.data)
         cell_counts_after<<-as.character(length( pbmcs_1@meta.data[["peak_region_fragments"]]))
         valueBox(value =cell_counts_after,subtitle ="cells after filtering",width = 12,
                  color = "yellow")
     })
-   
-    
     updateTabsetPanel(session,"qVinplot",selected = "After Filter")
     showNotification("Filter Cells End of run！", type = "message")
-   
     shinyjs::enable(selector = ".sidebar li a[data-value='two']")
     js.3 <- '$(document).ready(function(){
           // 获取菜单2的禁用状态
@@ -822,7 +758,6 @@ server <- function(input,output,session){
         cat("\033[31m","  RunTSNE \033[0m\n");
         pbmcs_1 <<- RunTSNE(object = pbmcs_1, reduction = 'lsi', dims = c(input$umapdim[1]:input$umapdim[2]))  
         values$NdpDimPlot<<-DimPlot(pbmcs_1, reduction = "tsne",label = FALSE)+NoLegend()
-        # +theme(legend.position = "none")
         output$ClusterDimPlot <- renderPlot({
           print(values$NdpDimPlot)
         })
@@ -922,11 +857,7 @@ server <- function(input,output,session){
       unique_clusters <<- as.character(unique(FindAllMarkers_result$cluster))
       updateSelectInput(inputId="Ident11",label="ident.1:",choices=levels(pbmcs@meta.data[[ident]]) )
       updateSelectInput(inputId="Ident12",label="ident.2:",choices=levels(pbmcs@meta.data[[ident]]) )
-      # updateSelectInput(inputId="Ident13",label="Select Cluster:",choices=c("All",sort(unique_clusters)))
-      # updateSelectInput(inputId="idents_selected",label="idents:",choices=sort(unique_clusters))
-      # updateSelectInput(inputId='Ident_motif',label = "Select Cluster:", choices = sort(unique_clusters))
-      # updateSelectInput(inputId='idents_selected1',label = "Select Cluster:", choices = sort(unique_clusters))
-  }
+     }
     })
   })
   observe({
@@ -1143,13 +1074,6 @@ server <- function(input,output,session){
         options = list(searching=T,ordering=T,
                        columnDefs = list(list(width="100px",targets = 1:6),list(className = 'dt-left',targets = 1:6),list(targets = 0, width="210px")),
                        lengthMenu=c(5,10,15,25,50,100),pageLength = 5)
-        # options = list(
-        #   dom='ftipr',
-        #   pageLength = 10,
-        #   autoWidth = TRUE,
-        #   columnDefs = list(list(width="100px",targets = 1:6),list(className = 'dt-left',targets = 1:6),list(targets = 0, width="210px")),
-        #   scrollX = TRUE
-        # )
         )}
       })
     for (i in 90:100) {
@@ -1170,18 +1094,7 @@ server <- function(input,output,session){
     if(nrow(FindAllMarkers_result)==0){
       sendSweetAlert(session = session,title = NULL,type="info",
                      text = "No features pass the min.pct threshold and logfc.threshold, you can adjust the thresholds accordingly." )}
-    
-    
-    # values$submit_ClusterMarkers<-TRUE
-    # output$submit_ClusterMarkers<-renderUI({
-    #   if(values$submit_ClusterMarkers){
-    #     div(actionButton("submit_ClusterMarkers","Cluster Markers", icon = icon("play-circle")), align = "center")
-    #     }else{
-    #       tagList()
-    #     }
-    # })
     showNotification("Find All Markers End of run！", type = "message")
-
     updateTabsetPanel(session,"GO_setting1",selected = "One vs Rest")
   #模块解锁------------------------------------- 
     shinyjs::show("featurePlotBox")
@@ -1361,7 +1274,6 @@ server <- function(input,output,session){
       print("relock------------------------------")
       # 只有在 enriched.motifs1 和 FindMarkers_result1 都不为 NULL 时才执行
       if (!is.null(FindMarkers_result1)) {
-        
         if (nrow(FindMarkers_result1) != 0) {
           if (assay2 == "peaks") {
             shinyjs::enable(selector = ".sidebar li a[data-value='sixtwo']")
@@ -1371,8 +1283,6 @@ server <- function(input,output,session){
         });
         '
             shinyjs::runjs(js.51)
-            
-    
           } else if (assay2 == "RNA") {
             shinyjs::disable(selector = ".sidebar li a[data-value='sixtwo']")
             js.51 <- '
@@ -1394,11 +1304,8 @@ server <- function(input,output,session){
       }
     })
   })
-  # print(input$CompareMarkers_data_rows_selected)
-  # updateSelectInput(session, "CompareMarkers_data_rows_selected", selected = NULL)
   observe({
     selected_row <<- input$CompareMarkers_data_rows_selected
-    # ident1 <- input$Ident11;ident2 <- input$Ident12
     print(selected_row)
     if(is.null(selected_row)){
       output$FM_VinPlot <- renderPlot({NULL})
@@ -1443,7 +1350,6 @@ server <- function(input,output,session){
     clean_annotation(TRUE)
     cat("cell annotation")
     ident<-paste0("peaks_snn_res.",input$resolution)
-    print(input$reference_data)
     if(input$reference_data=="DatabaseImmuneCell.se"){
       load("data/DatabaseImmuneCell.se.Rdata")
       CELL <- SingleR(test=as.matrix(pbmcs@assays$RNA@counts),       #输入表达矩阵
@@ -1493,10 +1399,8 @@ server <- function(input,output,session){
                       labels=MouseRNAseq$label.fine,
                       clusters= pbmcs@meta.data[[ident]])
     }
-    cells<<-CELL[,ncol(CELL):1]
-    cells<<- data.frame(cells)
+    cells<<-data.frame(CELL[,ncol(CELL):1])
     print(head(cells))
-    # cells<-c(,cells)
     output$singleR_data <- DT::renderDataTable({
       datatable(
         data = cells,
@@ -1511,8 +1415,6 @@ server <- function(input,output,session){
     names(cell_id) <<- levels(pbmcs@meta.data[[ident]])
     print(cell_id)
     cat("     cdass  ")
-    cat("     cdass  ")
-    
     Idents(pbmcs) <- ident
     pbmcs <- Seurat::RenameIdents(pbmcs, cell_id)
     pbmcs$ident <<- Idents(pbmcs)
@@ -1527,8 +1429,6 @@ server <- function(input,output,session){
   #Calling peak------------------------------------------------------
   observe({                          #chr片段改变时更新Gene Name
         if(!is.null(input$Feature3)&&!is.null(pbmcs)&&!is.null(pbmcs@assays$RNA)){
-          #print(gene_names_overlapping)
-          #gene_names_overlapping <<-NULL
           print("----------------df-ds---------------")
           start_end_strings <- strsplit(input$Feature3, '-')
           start_positions <<- as.numeric(sapply(start_end_strings, `[`, 2))- input$range_min * 1000
@@ -1589,10 +1489,7 @@ server <- function(input,output,session){
     cat("\033[31m","Plotting genomic regions! \033[0m\n");
     print(input$gene_name)
       if(!is.null(cells)){
-        # ident<-paste0("peaks_snn_res.",input$resolution)
-        # Idents(pbmcs) <-"peaks_snn_res.0.8"
-        # pbmcs <- Seurat::RenameIdents(pbmcs, cell_id)
-          if(input$AssayRadio3=="peaks"){
+        if(input$AssayRadio3=="peaks"){
             if(is.null(pbmcs@assays$RNA)){
               grGenomicRegionsPlot <<- CoveragePlot(
                 object = pbmcs,  
@@ -1700,7 +1597,6 @@ server <- function(input,output,session){
   observe({
     print("dsfj------------------dsg------")
     Select_ident<-input$Ident_motif;  
-    # MinPct <- input$MinPct3; 
     Pvalue <- input$Pvalue
     if(!is.null(FindAllMarkers_result)){
     MotifMarkers1(FindAllMarkers_result[FindAllMarkers_result$cluster==Select_ident&
@@ -1936,7 +1832,8 @@ server <- function(input,output,session){
                                                   total = 100); Sys.sleep(0.1)}
               pbmcs <<- AddMotifs(pbmcs,genome = selected_genome, pfm = pfm);  rm(pfm)}
             }}
-      for (i in 20:35) {updateProgressBar(session = session,
+      for (i in 20:35) {
+        updateProgressBar(session = session,
           id = "simulationProgress6",
           value = i,
           title = "It will take some time, please be patient and wait...",
@@ -1953,6 +1850,7 @@ server <- function(input,output,session){
                                           value = i,
                                           title = "It will take some time, please be patient and wait...",
                                           total = 100);Sys.sleep(0.1)}
+      set.seed(1234)
       enriched.motifs1 <<- FindMotifs(object = pbmcs,features = MotifTopMarkers1)
       enriched.motifs1[sapply(enriched.motifs1,is.numeric)] <<- round(enriched.motifs1[sapply(enriched.motifs1,is.numeric)],4)
       for (i in 80:90) {updateProgressBar(session = session,
@@ -2090,6 +1988,7 @@ server <- function(input,output,session){
       # if("peaks_snn_res.0.1" %in% identsList){Idents(pbmcs) <- "peaks_snn_res.0.1"}
       DefaultAssay(pbmcs) <- "peaks";    Idents(pbmcs) <- paste0("peaks_snn_res.",input$resolution)
       # MotifTopMarkers2 <<- (FindMarkers_result1  %>% top_n(n = topPeaks, wt = avg_log2FC))
+      set.seed(1234)
       enriched.motifs2 <<- FindMotifs(object = pbmcs,features = MotifTopMarkers2)
       enriched.motifs2[sapply(enriched.motifs2,is.numeric)] <<- round(enriched.motifs2[sapply(enriched.motifs2,is.numeric)],4)
       output$Motif_data2 <- DT::renderDataTable({
@@ -2149,10 +2048,8 @@ server <- function(input,output,session){
         id = "simulationProgress7",
         value = i,
         title = "It will take some time, please be patient and wait...",
-        total = 100
-      )
-      Sys.sleep(0.1)
-    }
+        total = 100)
+      Sys.sleep(0.1)}
     DefaultAssay(pbmcs) <- "peaks"
     observe({
     if(!is.null(cells)){
@@ -2170,10 +2067,8 @@ server <- function(input,output,session){
             id = "simulationProgress7",
             value = i,
             title = "It will take some time, please be patient and wait...",
-            total = 100
-          )
-          Sys.sleep(0.1)
-        }
+            total = 100)
+          Sys.sleep(0.1)}
       },error=function(e){
         cat("Error", e$message, "\n")
         sendSweetAlert(session = session,
